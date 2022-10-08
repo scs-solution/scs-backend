@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { MySQLConfigModule } from './config/config.module';
 import { MySQLConfigService } from './config/config.service';
 import { UserModule } from './user/user.module';
+import { InfraModule } from './infra/infra.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UserModule } from './user/user.module';
 
     UserModule,
     ConfigModule,
+    InfraModule,
   ],
   controllers: [AppController],
   providers: [AppService],
