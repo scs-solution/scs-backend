@@ -7,7 +7,7 @@ import {
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
-import { customUserRepositoryMethods, UserRepository } from './user.repository';
+import { customUserRepositoryMethods } from './user.repository';
 import { UserService } from './user.service';
 
 @Module({

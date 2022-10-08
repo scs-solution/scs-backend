@@ -28,15 +28,18 @@
     "@nestjs/swagger": "^6.1.2",
     "@nestjs/typeorm": "^9.0.1",
     "@types/bcrypt": "^5.0.0",
+    "aws-sdk": "^2.1231.0",
     "bcrypt": "^5.1.0",
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.3",
     "joi": "^17.6.2",
     "mysql2": "^2.3.3",
+    "nest-aws-sdk": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.10",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

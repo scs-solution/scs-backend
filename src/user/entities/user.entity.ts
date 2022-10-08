@@ -18,6 +18,9 @@ export class User extends CoreEntity {
   @Column()
   password: string;
 
+  @Column()
+  privateKey: string;
+
   @BeforeInsert()
   async hashPassword(): Promise<void> {
     try {
