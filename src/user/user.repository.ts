@@ -1,5 +1,5 @@
 import { UnauthorizedException } from '@nestjs/common';
-import { EntityRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UserRegisterDTO } from './dtos/user-register.dtos';
 import { User } from './entities/user.entity';
 
