@@ -11,8 +11,8 @@ export class UserController {
   @ApiOperation({ summary: 'Register User' })
   @ApiCreatedResponse({ description: '' })
   async createRegister(
-    @Body() userRegisterDTO: UserRegisterDTO,
+    @Body() dto: UserRegisterDTO,
   ): Promise<{ ok: boolean; error?: string }> {
-    return { ok: true };
+    return await this.userService.registerUser(dto);
   }
 }
