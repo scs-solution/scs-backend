@@ -34,7 +34,7 @@ export class UserService {
     }
   }
 
-  async getPresignedUrl(): Promise<{ fn: string; url: string }> {
+  private async getPresignedUrl(): Promise<{ fn: string; url: string }> {
     const fileName = `${uuid()}.key`;
 
     const params = {
@@ -50,11 +50,7 @@ export class UserService {
     return { fn: fileName, url: s3Url };
   }
 
-  async appendCreatePrivateKey(
-    userId: string,
-    fn: string,
-    url: string,
-  ): Promise<void> {
+  private appendCreatePrivateKey(userId: string, fn: string, url: string) {
     exec(`./script/create-ssh-keypair ${userId} ${fn} ${url}`);
   }
 }
