@@ -1,9 +1,11 @@
-import { IsString } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 
 export class UserRegisterDTO {
   @IsString()
-  id: string;
+  @Length(4, 20)
+  userId: string;
 
   @IsString()
+  @Length(8, 50)
   password: string;
 }

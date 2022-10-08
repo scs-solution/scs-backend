@@ -7,8 +7,13 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async registerUser(
-    userRegisterDTO: UserRegisterDTO,
-  ): Promise<{ ok: boolean }> {
-    return { ok: true };
+    dto: UserRegisterDTO,
+  ): Promise<{ ok: boolean; err?: string }> {
+    try {
+      await this.userRepository.createUser(dto);
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, err: e };
+    }
   }
 }
