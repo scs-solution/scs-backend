@@ -51,6 +51,12 @@ export class UserService {
   }
 
   private appendCreatePrivateKey(userId: string, fn: string, url: string) {
-    exec(`./script/create-ssh-keypair ${userId} ${fn} ${url}`);
+    exec(
+      `./script/create-ssh-keypair "${userId}" "${fn}" "${url}"`,
+      (error, stdout, stderr) => {
+        console.log(error);
+        console.log(stderr);
+      },
+    );
   }
 }
