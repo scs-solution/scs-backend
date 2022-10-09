@@ -1,30 +1,13 @@
 import { Module } from '@nestjs/common';
-import {
-  getDataSourceToken,
-  getRepositoryToken,
-  TypeOrmModule,
-} from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UserController } from './user.controller';
-import { customUserRepositoryMethods } from './user.repository';
 import { UserService } from './user.service';
+import { UserRepository } from './user.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UserController],
-  providers: [
-    {
-      provide: getRepositoryToken(User),
-      inject: [getDataSourceToken()],
-      useFactory(dataSource: DataSource) {
-        // Override default repository for User with a custom one
-        return dataSource
-          .getRepository(User)
-          .extend(customUserRepositoryMethods);
-      },
-    },
-    UserService,
-  ],
+  providers: [UserRepository, UserService],
 })
 export class UserModule {}

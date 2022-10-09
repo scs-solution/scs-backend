@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserRegisterDTO } from './dtos/user-register.dtos';
 import { UserRepository } from './user.repository';
-import AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { exec } from 'child_process';

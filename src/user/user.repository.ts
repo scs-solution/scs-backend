@@ -1,19 +1,19 @@
 import { UnauthorizedException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common/decorators';
+import { DataSource, Repository } from 'typeorm';
 import { UserRegisterDTO } from './dtos/user-register.dtos';
 import { User } from './entities/user.entity';
 
-export interface UserRepository extends Repository<User> {
-  this: Repository<User>;
+@Injectable()
+export class UserRepository extends Repository<User> {
+  constructor(private dataSource: DataSource) {
+    super(User, dataSource.createEntityManager());
+  }
 
-  createUser(dto: UserRegisterDTO, privateKey: string): Promise<User>;
-}
-
-export const customUserRepositoryMethods: Pick<UserRepository, 'createUser'> = {
   async createUser(dto: UserRegisterDTO, privateKey: string): Promise<User> {
     const { userId, password } = dto;
 
-    const checkUser = await this.findOne({ userId });
+    const checkUser = await this.findOneBy({ userId });
     if (checkUser) throw new UnauthorizedException('user id already exists');
 
     const user = this.create({ userId, password, privateKey });
@@ -23,5 +23,5 @@ export const customUserRepositoryMethods: Pick<UserRepository, 'createUser'> = {
     } catch (error) {
       throw new Error(error);
     }
-  },
-};
+  }
+}
