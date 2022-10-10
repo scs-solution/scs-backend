@@ -47,7 +47,7 @@ export class AuthController {
     res.cookie('jwt-refresh', tokens.refreshToken, { httpOnly: true });
   }
 
-  @Get()
+  @Get('/refresh')
   @ApiOperation({ summary: 'Get refresh token' })
   async refreshToken(
     @Req() req: Request,

@@ -7,14 +7,16 @@ import { UserRepository } from 'src/user/user.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { AccessTokenStrategy } from './jwt/access-token.strategy';
 import { RefreshTokenStrategy } from './jwt/refresh-token.strategy';
+import { User } from 'src/user/entities/user.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserRepository]),
-    JwtModule.register({}),
-    UserModule,
+  imports: [JwtModule.register({}), UserModule],
+  providers: [
+    AuthService,
+    UserRepository,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
   ],
-  providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

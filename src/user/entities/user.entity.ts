@@ -38,6 +38,6 @@ export class User extends CoreEntity {
   }
 
   async checkPassword(plain: string): Promise<boolean> {
-    return this.password === (await bcrypt.hash(plain, 10));
+    return bcrypt.compare(plain, this.password);
   }
 }

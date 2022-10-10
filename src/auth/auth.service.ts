@@ -16,8 +16,8 @@ export class AuthService {
 
   async verifyUserAndSignJWT(dto: UserRegisterDTO): Promise<ResLoginUser> {
     const user = await this.userRepository.findOneBy({ userId: dto.userId });
-    if (!user) {
-      throw new Error('User id is not found');
+    if (!user || !(await user.checkPassword(dto.password))) {
+      throw new BadRequestException('User id or password not found');
     }
     try {
       const tokens = await this.createJWT(user.userId);
