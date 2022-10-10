@@ -16,13 +16,4 @@ export class UserController {
   ): Promise<{ ok: boolean; error?: string }> {
     return await this.userService.registerUser(dto);
   }
-
-  @Post('/')
-  @ApiOperation({ summary: 'Login' })
-  async login(
-    @Body() dto: UserRegisterDTO,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<void> {
-    res.cookie('', '', { httpOnly: true });
-  }
 }
