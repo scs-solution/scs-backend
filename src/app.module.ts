@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { InfraModule } from './infra/infra.module';
 import { AwsSdkModule } from 'nest-aws-sdk';
 import { S3 } from 'aws-sdk';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { S3 } from 'aws-sdk';
     UserModule,
     ConfigModule,
     InfraModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

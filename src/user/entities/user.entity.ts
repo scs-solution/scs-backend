@@ -4,6 +4,7 @@ import { CoreEntity } from 'src/common/entities/core.entity';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User extends CoreEntity {
@@ -16,10 +17,16 @@ export class User extends CoreEntity {
   userId: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column()
+  @Exclude()
   privateKey: string;
+
+  @Column({ nullable: true })
+  @Exclude()
+  refreshToken?: string;
 
   @BeforeInsert()
   async hashPassword(): Promise<void> {
@@ -28,5 +35,9 @@ export class User extends CoreEntity {
     } catch (e) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async checkPassword(plain: string): Promise<boolean> {
+    return this.password === (await bcrypt.hash(plain, 10));
   }
 }

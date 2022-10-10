@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { UserRegisterDTO } from './dtos/user-register.dtos';
 import { UserService } from './user.service';
+import { Request, Response } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -14,5 +15,14 @@ export class UserController {
     @Body() dto: UserRegisterDTO,
   ): Promise<{ ok: boolean; error?: string }> {
     return await this.userService.registerUser(dto);
+  }
+
+  @Post('/')
+  @ApiOperation({ summary: 'Login' })
+  async login(
+    @Body() dto: UserRegisterDTO,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    res.cookie('', '', { httpOnly: true });
   }
 }
