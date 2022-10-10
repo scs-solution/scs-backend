@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Exclude } from 'class-transformer';
+import { Infra } from 'src/infra/entities/infra.entity';
 
 @Entity()
 export class User extends CoreEntity {
@@ -27,6 +28,9 @@ export class User extends CoreEntity {
   @Column({ nullable: true })
   @Exclude()
   refreshToken?: string;
+
+  @OneToMany(() => Infra, (infra) => infra.user)
+  infras: Infra[];
 
   @BeforeInsert()
   async hashPassword(): Promise<void> {
