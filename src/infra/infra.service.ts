@@ -27,4 +27,16 @@ export class InfraService {
       return { ok: false, error: e };
     }
   }
+
+  async listInfra(
+    user: User,
+  ): Promise<{ ok: boolean; error?: string; result?: string[] }> {
+    try {
+      const result = (await user.infras).map((e) => e.name);
+
+      return { ok: true, result: result };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
+  }
 }

@@ -30,7 +30,7 @@ export class User extends CoreEntity {
   refreshToken?: string;
 
   @OneToMany(() => Infra, (infra) => infra.user)
-  infras: Infra[];
+  infras: Promise<Infra[]>;
 
   @BeforeInsert()
   async hashPassword(): Promise<void> {

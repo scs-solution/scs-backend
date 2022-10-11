@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from 'src/user/entities/user.entity';
@@ -16,5 +16,13 @@ export class InfraController {
     @Body() dto: InfraCreateDto,
   ): Promise<{ ok: boolean; error?: string }> {
     return await this.infraService.createInfra(currentUser, dto);
+  }
+
+  @Get()
+  @UseGuards(AccessTokenGuard)
+  async getInfraList(
+    @CurrentUser() currentUser: User,
+  ): Promise<{ ok: boolean; error?: string; result?: string[] }> {
+    return await this.infraService.listInfra(currentUser);
   }
 }
