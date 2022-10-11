@@ -5,6 +5,7 @@ import * as AWS from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { exec } from 'child_process';
+import axios from 'axios';
 
 const s3 = new AWS.S3({ useAccelerateEndpoint: true });
 
@@ -51,12 +52,10 @@ export class UserService {
   }
 
   private appendCreatePrivateKey(userId: string, fn: string, url: string) {
-    exec(
-      `./script/create-ssh-keypair "${userId}" "${fn}" "${url}"`,
-      (error, stdout, stderr) => {
-        console.log(error);
-        console.log(stderr);
-      },
-    );
+    axios.post('http://172.17.0.1:3001/create-ssh-keypair', {
+      userId,
+      fn,
+      url,
+    });
   }
 }
