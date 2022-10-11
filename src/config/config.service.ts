@@ -8,9 +8,7 @@ import { User } from 'src/user/entities/user.entity';
 export class MySQLConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
-  createTypeOrmOptions(
-    connectionName?: string,
-  ): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
+  createTypeOrmOptions(): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
     return {
       type: 'mysql',
       username: this.configService.get<string>('DB_USER'),

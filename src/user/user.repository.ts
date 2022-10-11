@@ -1,4 +1,3 @@
-import { UnauthorizedException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common/decorators';
 import { DataSource, Repository } from 'typeorm';
 import { UserRegisterDTO } from './dtos/user-register.dtos';

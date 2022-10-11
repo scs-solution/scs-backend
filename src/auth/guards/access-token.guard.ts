@@ -11,7 +11,7 @@ export class AccessTokenGuard extends AuthGuard('jwt-access') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, user: any, info: any) {
+  handleRequest(err: any, user: any) {
     if (err || !user) {
       throw err || new UnauthorizedException('Retry login');
     }
