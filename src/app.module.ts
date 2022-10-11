@@ -43,8 +43,6 @@ import { AuthModule } from './auth/auth.module';
     AwsSdkModule.forRoot({
       defaultServiceOptions: {
         region: 'ap-northeast-2',
-        accessKeyId: process.env.AWS_ACCESS_KEY,
-        secretAccessKey: process.env.AWS_SECRET_KEY,
         signatureVersion: 's3v4',
       },
       services: [S3],
