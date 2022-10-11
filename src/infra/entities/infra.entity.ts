@@ -21,12 +21,9 @@ export class Infra extends CoreEntity {
   @IsString()
   name: string;
 
-  @ApiProperty({
-    description: 'Infra Terraform Description Json',
-  })
   @Exclude()
-  @IsJSON()
-  description: string;
+  @IsString()
+  desc: string;
 
   @ManyToOne(() => User, (user) => user.infras)
   user: User;

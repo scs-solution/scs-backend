@@ -4,7 +4,6 @@ import { UserRepository } from './user.repository';
 import * as AWS from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { exec } from 'child_process';
 import axios from 'axios';
 
 @Injectable()
