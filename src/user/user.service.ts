@@ -26,9 +26,10 @@ export class UserService {
     try {
       const { fn, url } = await this.getPresignedUrl();
 
+      await this.appendCreatePrivateKey(dto.userId, fn, url);
+
       await this.userRepository.createUser(dto, fn);
 
-      this.appendCreatePrivateKey(dto.userId, fn, url);
       return { ok: true };
     } catch (e) {
       return { ok: false, err: e };
@@ -51,8 +52,12 @@ export class UserService {
     return { fn: fileName, url: s3Url };
   }
 
-  private appendCreatePrivateKey(userId: string, fn: string, url: string) {
-    axios.post('http://172.17.0.1:3001/create-ssh-keypair', {
+  private async appendCreatePrivateKey(
+    userId: string,
+    fn: string,
+    url: string,
+  ): Promise<void> {
+    await axios.post('http://172.17.0.1:3001/create-ssh-keypair', {
       userId,
       fn,
       url,
