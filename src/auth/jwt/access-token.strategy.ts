@@ -20,7 +20,7 @@ export class AccessTokenStrategy extends PassportStrategy(
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([jwtExtractorFromCookies]),
-      secretOrKey: configService.get<string>('REFRESH_TOKEN_SECRET_KEY'),
+      secretOrKey: configService.get<string>('ACCESS_TOKEN_SECRET_KEY'),
       passReqToCallback: true,
     });
   }
