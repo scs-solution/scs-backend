@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserRepository } from 'src/user/user.repository';
 import { AuthService } from '../auth.service';

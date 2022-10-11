@@ -9,6 +9,7 @@ export const jwtExtractorFromCookies: JwtFromRequestFunction = (
     const jwt = request.cookies['jwt-access'];
     return jwt;
   } catch (error) {
+    console.log(error);
     Logger.log('처리되지 않은 에러', jwtExtractorFromCookies);
     return null;
   }

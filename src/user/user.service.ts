@@ -26,7 +26,7 @@ export class UserService {
       if (await this.userRepository.isUserExists(dto.userId))
         throw new UnauthorizedException('user id already exists');
 
-      await this.appendCreatePrivateKey(dto.userId, fn, url);
+      // await this.appendCreatePrivateKey(dto.userId, fn, url);
 
       await this.userRepository.createUser(dto, fn);
 
