@@ -13,6 +13,7 @@ export class AccessTokenGuard extends AuthGuard('jwt-access') {
 
   handleRequest(err: any, user: any) {
     if (err || !user) {
+      console.log(err);
       throw err || new UnauthorizedException('Retry login');
     }
     return user;
