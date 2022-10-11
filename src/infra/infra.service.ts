@@ -32,7 +32,15 @@ export class InfraService {
     user: User,
   ): Promise<{ ok: boolean; error?: string; result?: string[] }> {
     try {
-      const result = (await user.infras).map((e) => e.name);
+      const infras = await this.infraRepository.find({
+        select: {
+          name: true,
+        },
+        where: {
+          id: user.id,
+        },
+      });
+      const result = infras.map((e) => e.name);
 
       return { ok: true, result: result };
     } catch (e) {
