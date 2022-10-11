@@ -42,7 +42,7 @@ export class UserService {
     const fileName = `${uuid()}.key`;
 
     const params = {
-      Bucket: 'scs-user-pks',
+      Bucket: this.keyPairS3Buket,
       Key: fileName,
       Expires: 3600,
       ContentType: 'text/plain',
