@@ -18,6 +18,7 @@ import { AccessTokenGuard } from './guards/access-token.guard';
 import { Tokens } from './jwt/jwt.token';
 import { Request, Response } from 'express';
 import { ResLoginUser } from './dtos/res-login-user.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
@@ -30,8 +31,8 @@ export class AuthController {
   @ApiOperation({ summary: 'Get current user information' })
   @ApiCreatedResponse({ description: 'User Information', type: User })
   @UseGuards(AccessTokenGuard)
-  async getCurrentUser(@CurrentUser() currentUser: User): Promise<User> {
-    return currentUser;
+  getCurrentUser(@CurrentUser() currentUser: User): User {
+    return plainToClass(User, currentUser);
   }
 
   @Post()
