@@ -32,6 +32,7 @@ export class UserService {
 
       return { ok: true };
     } catch (e) {
+      console.log(e);
       return { ok: false, err: e };
     }
   }
@@ -57,10 +58,14 @@ export class UserService {
     fn: string,
     url: string,
   ): Promise<void> {
-    await axios.post('http://172.17.0.1:3001/create-ssh-keypair', {
-      userId,
-      fn,
-      url,
-    });
+    await axios
+      .post('http://172.17.0.1:3001/create-ssh-keypair', {
+        userId,
+        fn,
+        url,
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   }
 }
