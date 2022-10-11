@@ -1,15 +1,17 @@
-import { IsString, Length, Matches } from 'class-validator';
+import { IsString, Matches } from 'class-validator';
 
 export class UserRegisterDTO {
   @IsString()
-  @Length(4, 20)
-  @Matches(/^\w+$/, {
+  @Matches(/^\w{4,20}$/, {
     message:
       'Id must be between 4 and 20 characters long with number or alphabet',
   })
   userId: string;
 
   @IsString()
-  @Length(8, 50)
+  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{6,64}$/gm, {
+    message:
+      'Password must be between 6 and 64 characters long with 1 special character and capital character each',
+  })
   password: string;
 }
