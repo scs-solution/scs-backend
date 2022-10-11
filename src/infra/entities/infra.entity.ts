@@ -1,7 +1,7 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsJSON, IsNotEmpty, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { User } from 'src/user/entities/user.entity';
 import { BeforeInsert, Column, Entity, ManyToOne } from 'typeorm';
@@ -20,6 +20,13 @@ export class Infra extends CoreEntity {
   @IsNotEmpty({ message: 'Name is required for creating infra.' })
   @IsString()
   name: string;
+
+  @ApiProperty({
+    description: 'Infra Terraform Description Json',
+  })
+  @Exclude()
+  @IsJSON()
+  description: string;
 
   @ManyToOne(() => User, (user) => user.infras)
   user: User;
