@@ -10,12 +10,16 @@ export class UserRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
+  async isUserExists(userId: string): Promise<boolean> {
+    return (
+      (await this.findOneBy({
+        userId,
+      })) !== null
+    );
+  }
+
   async createUser(dto: UserRegisterDTO, privateKey: string): Promise<User> {
     const { userId, password } = dto;
-
-    const checkUser = await this.findOneBy({ userId });
-    if (checkUser) throw new UnauthorizedException('user id already exists');
-
     const user = this.create({ userId, password, privateKey });
     try {
       await this.save(user);

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRegisterDTO } from './dtos/user-register.dtos';
 import { UserRepository } from './user.repository';
 import * as AWS from 'aws-sdk';
@@ -23,6 +23,9 @@ export class UserService {
   ): Promise<{ ok: boolean; err?: string }> {
     try {
       const { fn, url } = await this.getPresignedUrl();
+
+      if (await this.userRepository.isUserExists(dto.userId))
+        throw new UnauthorizedException('user id already exists');
 
       await this.appendCreatePrivateKey(dto.userId, fn, url);
 
