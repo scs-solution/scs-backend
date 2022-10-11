@@ -17,12 +17,14 @@ export class Infra extends CoreEntity {
   @Column({ unique: true })
   infraId: string;
 
+  @Column()
   @IsNotEmpty({ message: 'Name is required for creating infra.' })
   @IsString()
   name: string;
 
+  @Column('text')
   @Exclude()
-  @IsString()
+  @IsJSON()
   desc: string;
 
   @ManyToOne(() => User, (user) => user.infras)
