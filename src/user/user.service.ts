@@ -5,8 +5,6 @@ import * as AWS from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import { Infra } from 'src/infra/entities/infra.entity';
-import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
