@@ -8,8 +8,6 @@ import { MySQLConfigModule } from './config/config.module';
 import { MySQLConfigService } from './config/config.service';
 import { UserModule } from './user/user.module';
 import { InfraModule } from './infra/infra.module';
-import { AwsSdkModule } from 'nest-aws-sdk';
-import { S3 } from 'aws-sdk';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -38,14 +36,6 @@ import { AuthModule } from './auth/auth.module';
       imports: [MySQLConfigModule],
       useClass: MySQLConfigService,
       inject: [MySQLConfigService],
-    }),
-
-    AwsSdkModule.forRoot({
-      defaultServiceOptions: {
-        region: 'ap-northeast-2',
-        signatureVersion: 's3v4',
-      },
-      services: [S3],
     }),
 
     UserModule,

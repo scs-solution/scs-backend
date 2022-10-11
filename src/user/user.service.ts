@@ -7,8 +7,6 @@ import { ConfigService } from '@nestjs/config';
 import { exec } from 'child_process';
 import axios from 'axios';
 
-const s3 = new AWS.S3({ useAccelerateEndpoint: true });
-
 @Injectable()
 export class UserService {
   private keyPairS3Buket: string;
@@ -41,12 +39,18 @@ export class UserService {
     const fileName = `${uuid()}.key`;
 
     const params = {
-      Bucket: this.keyPairS3Buket,
+      Bucket: 'scs-user-pks',
       Key: fileName,
       Expires: 3600,
       ContentType: 'text/plain',
       ACL: 'private',
     };
+
+    const s3 = new AWS.S3({
+      useAccelerateEndpoint: true,
+      signatureVersion: 'v4',
+      region: 'ap-northeast-2',
+    });
 
     const s3Url = await s3.getSignedUrlPromise('putObject', params);
 
@@ -58,6 +62,9 @@ export class UserService {
     fn: string,
     url: string,
   ): Promise<void> {
+    console.log(userId);
+    console.log(fn);
+    console.log(url);
     await axios
       .post('http://172.17.0.1:3001/create-ssh-keypair', {
         userId,
