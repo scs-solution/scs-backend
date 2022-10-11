@@ -4,7 +4,7 @@ import { Exclude } from 'class-transformer';
 import { IsJSON, IsNotEmpty, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { User } from 'src/user/entities/user.entity';
-import { BeforeInsert, Column, Entity, ManyToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
 @Entity()
@@ -28,6 +28,7 @@ export class Infra extends CoreEntity {
   desc: string;
 
   @ManyToOne(() => User, (user) => user.infras)
+  @JoinColumn()
   user: User;
 
   @BeforeInsert()

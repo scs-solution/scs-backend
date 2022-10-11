@@ -36,9 +36,11 @@ export class InfraService {
         select: {
           name: true,
         },
-        where: {
-          id: user.id,
-        },
+        where: [
+          {
+            user: { id: user.id },
+          },
+        ],
       });
       const result = infras.map((e) => e.name);
 
