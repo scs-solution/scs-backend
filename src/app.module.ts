@@ -9,6 +9,7 @@ import { MySQLConfigService } from './config/config.service';
 import { UserModule } from './user/user.module';
 import { InfraModule } from './infra/infra.module';
 import { AuthModule } from './auth/auth.module';
+import { InstanceModule } from './instance/instance.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule,
     InfraModule,
     AuthModule,
+    InstanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
