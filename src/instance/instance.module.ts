@@ -7,7 +7,7 @@ import { InfraRepository } from 'src/infra/infra.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Infra])],
-  providers: [InstanceService],
-  controllers: [InfraRepository, InstanceController],
+  providers: [InfraRepository, InstanceService],
+  controllers: [InstanceController],
 })
 export class InstanceModule {}

@@ -20,6 +20,7 @@ export class InstanceService {
     dto: InstanceCreateDto,
   ): Promise<{ ok: boolean; error?: string }> {
     try {
+      // TODO: apply redis distributed lock
       const { name, infraName, instanceSpec, instanceType } = dto;
 
       const infra = await this.getAndCheckInfra(user, infraName);
