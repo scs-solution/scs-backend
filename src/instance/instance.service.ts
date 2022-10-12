@@ -46,6 +46,8 @@ export class InstanceService {
 
       infra.desc = JSON.stringify(infraDesc);
 
+      await this.infraRespository.save(infra);
+
       this.applyInfra(infraDesc);
 
       return { ok: true };
