@@ -28,8 +28,11 @@ export class Infra extends CoreEntity {
   desc: string;
 
   @ManyToOne(() => User, (user) => user.infras)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId' })
   user: User;
+
+  @Column()
+  userId: number;
 
   @BeforeInsert()
   async createInfraId(): Promise<void> {

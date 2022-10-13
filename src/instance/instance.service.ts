@@ -27,7 +27,7 @@ export class InstanceService {
       const infraDesc: InfraDescription = JSON.parse(infra.desc);
 
       if (
-        infraDesc.instances ||
+        infraDesc.instances &&
         infraDesc.instances.some((e) => e.name === dto.name)
       ) {
         throw new BadRequestException('Instance name is already exists!');
@@ -49,7 +49,7 @@ export class InstanceService {
 
       await this.infraRespository.save(infra);
 
-      this.applyInfra(infraDesc);
+      this.applyInfra(user.privateKey, infraDesc);
 
       return { ok: true };
     } catch (e) {
@@ -62,7 +62,7 @@ export class InstanceService {
       name: infraName,
     });
 
-    if (!infra || infra.user.id !== user.id) {
+    if (!infra || infra.userId !== user.id) {
       throw new UnauthorizedException(
         'Infra does not exist or different owner',
       );
@@ -71,9 +71,17 @@ export class InstanceService {
     return infra;
   }
 
-  private async applyInfra(desc: InfraDescription): Promise<void> {
+  private async applyInfra(
+    privateKey: string,
+    desc: InfraDescription,
+  ): Promise<void> {
+    console.log(privateKey);
+    console.log(JSON.stringify(desc));
     await axios
-      .post('http://172.17.0.1:3001/apply-infra', desc)
+      .post('http://172.17.0.1:3001/apply-infra', {
+        desc: desc,
+        privateKey: privateKey,
+      })
       .catch(function (err) {
         console.log(err);
       });
