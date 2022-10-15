@@ -2,9 +2,9 @@ import { IsString, Matches } from 'class-validator';
 
 export class InstanceCreateDto {
   @IsString()
-  @Matches(/^[\w- ]{4,20}$/, {
+  @Matches(/^[\w-]{4,20}$/, {
     message:
-      'Instance name must be between 4 and 20 characters long with number, space or alphabet',
+      'Instance name must be between 4 and 20 characters long with number, alphabet or dash',
   })
   name: string;
 
