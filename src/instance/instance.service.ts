@@ -78,9 +78,12 @@ export class InstanceService {
     console.log(privateKey);
     console.log(JSON.stringify(desc));
     await axios
+      .create({
+        timeout: 30000,
+      })
       .post('http://172.17.0.1:3001/apply-infra', {
         desc: desc,
-        privateKey: privateKey,
+        privateKey: privateKey.split('.')[0],
       })
       .catch(function (err) {
         console.log(err);
