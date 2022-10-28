@@ -3,6 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { Infra } from 'src/infra/entities/infra.entity';
 import { InfraRepository } from 'src/infra/infra.repository';
@@ -13,7 +14,14 @@ import { InstanceCreateDto } from './dtos/instance-create.dtos';
 
 @Injectable()
 export class InstanceService {
-  constructor(private readonly infraRespository: InfraRepository) {}
+  private infraUpdateKey: string;
+
+  constructor(
+    private readonly infraRespository: InfraRepository,
+    private readonly configService: ConfigService,
+  ) {
+    this.infraUpdateKey = this.configService.get<string>('INFRA_UPDATE_KEY');
+  }
 
   async createNewInstance(
     user: User,
@@ -84,6 +92,7 @@ export class InstanceService {
       .post('http://172.17.0.1:3001/apply-infra', {
         desc: desc,
         privateKey: privateKey.split('.')[0],
+        updateKey: this.infraUpdateKey,
       })
       .catch(function (err) {
         console.log(err);
