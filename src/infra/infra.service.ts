@@ -1,8 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InstanceRepository } from 'src/instance/instance.repository';
 import { User } from 'src/user/entities/user.entity';
 import { InfraCreateDto } from './dtos/infra-create.dtos';
 import { InfraUpdateDto } from './dtos/infra-update.dtos';
+import { Infra } from './entities/infra.entity';
 import { InfraRepository } from './infra.repository';
 import { InfraDescription } from './types/infra.desc';
 import { InfraInstance } from './types/infra.instance';
@@ -14,6 +16,7 @@ export class InfraService {
   constructor(
     private readonly infraRepository: InfraRepository,
     private readonly configService: ConfigService,
+    private readonly instanceRepository: InstanceRepository,
   ) {
     this.infraUpdateKey = this.configService.get<string>('INFRA_UPDATE_KEY');
   }
@@ -86,5 +89,37 @@ export class InfraService {
     infra.desc = JSON.stringify(infraDesc);
 
     await this.infraRepository.save(infra);
+
+    await this.updateInstances(dto, infra);
+  }
+
+  private async updateInstances(
+    dto: InfraUpdateDto,
+    infra: Infra,
+  ): Promise<void> {
+    const instances = await this.instanceRepository.findBy({
+      infraId: infra.id,
+    });
+
+    const instanceExistsMap = {};
+
+    instances.forEach((value) => {
+      instanceExistsMap[value.instanceId] = 1;
+    });
+
+    const instanceMustInserted: string[] = [];
+
+    dto.instances.forEach((e) => {
+      if (
+        instanceExistsMap[e.instanceId] === undefined ||
+        instanceExistsMap[e.instanceId] !== 1
+      ) {
+        instanceMustInserted.push(e.instanceId);
+      }
+    });
+
+    for (const instanceId of instanceMustInserted) {
+      await this.instanceRepository.createInstance(infra, instanceId);
+    }
   }
 }

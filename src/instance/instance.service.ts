@@ -11,6 +11,9 @@ import { InfraDescription } from 'src/infra/types/infra.desc';
 import { InfraInstance } from 'src/infra/types/infra.instance';
 import { User } from 'src/user/entities/user.entity';
 import { InstanceCreateDto } from './dtos/instance-create.dtos';
+import { ReceiveSnsEventDto } from './dtos/receive-sns-event.dtos';
+import { InstanceRepository } from './instance.repository';
+import { AWSEventBridgeEvent } from './model/aws-event.model';
 
 @Injectable()
 export class InstanceService {
@@ -19,6 +22,7 @@ export class InstanceService {
   constructor(
     private readonly infraRespository: InfraRepository,
     private readonly configService: ConfigService,
+    private readonly instanceRepository: InstanceRepository,
   ) {
     this.infraUpdateKey = this.configService.get<string>('INFRA_UPDATE_KEY');
   }
@@ -83,8 +87,6 @@ export class InstanceService {
     privateKey: string,
     desc: InfraDescription,
   ): Promise<void> {
-    console.log(privateKey);
-    console.log(JSON.stringify(desc));
     await axios
       .create({
         timeout: 30000,
@@ -92,6 +94,45 @@ export class InstanceService {
       .post('http://172.17.0.1:3001/apply-infra', {
         desc: desc,
         privateKey: privateKey.split('.')[0],
+        updateKey: this.infraUpdateKey,
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
+
+  async receiveSnsEvent(e: ReceiveSnsEventDto) {
+    const message = JSON.parse(e.Message) as AWSEventBridgeEvent;
+
+    // We are only handle EC2 Spot Instance Interruption Warning
+    if (!message['detail-type'].includes('Interruption')) return;
+    if (message.detail['instance-action'] != 'terminate') return;
+
+    const targetInstanceId = message.detail['instance-id'];
+
+    // handle will terminated instance
+    const instance = await this.instanceRepository.findOne({
+      where: {
+        instanceId: targetInstanceId,
+      },
+      relations: {
+        infra: {
+          user: true,
+        },
+      },
+    });
+
+    const infra = instance.infra;
+    const infraDesc: InfraDescription = JSON.parse(infra.desc);
+
+    await axios
+      .create({
+        timeout: 30000,
+      })
+      .post('http://172.17.0.1:3001/handle-spot-termination', {
+        target: targetInstanceId,
+        desc: infraDesc,
+        privateKey: infra.user.privateKey.split('.')[0],
         updateKey: this.infraUpdateKey,
       })
       .catch(function (err) {

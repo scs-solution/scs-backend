@@ -3,8 +3,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { IsJSON, IsNotEmpty, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
+import { Instance } from 'src/instance/entities/instance.entity';
 import { User } from 'src/user/entities/user.entity';
-import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
 @Entity()
@@ -33,6 +41,9 @@ export class Infra extends CoreEntity {
 
   @Column()
   userId: number;
+
+  @OneToMany(() => Instance, (instance) => instance.infra)
+  instances: Instance[];
 
   @BeforeInsert()
   async createInfraId(): Promise<void> {

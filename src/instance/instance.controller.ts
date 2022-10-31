@@ -5,7 +5,7 @@ import { User } from 'src/user/entities/user.entity';
 import { InstanceCreateDto } from './dtos/instance-create.dtos';
 import { ReceiveSnsEventDto } from './dtos/receive-sns-event.dtos';
 import { InstanceService } from './instance.service';
-import { AWSEventBridgeEvent } from './model/aws-event.model';
+import { Logger } from '@nestjs/common';
 
 @Controller('instance')
 export class InstanceController {
@@ -22,7 +22,7 @@ export class InstanceController {
 
   @Post('/receiveSnsEvent')
   async receiveSnsEvent(@Body() e: ReceiveSnsEventDto): Promise<void> {
-    console.log(e);
-    console.log((JSON.parse(e.Message) as AWSEventBridgeEvent).detail);
+    Logger.log('receive sns event', JSON.stringify(e));
+    await this.instanceService.receiveSnsEvent(e);
   }
 }
