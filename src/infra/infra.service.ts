@@ -82,10 +82,11 @@ export class InfraService {
     });
 
     dto.instances.forEach((e) => {
-      instanceMap[e.name].instanceId = e.instanceId;
-      instanceMap[e.name].privateIp = e.privateIp;
-      instanceMap[e.name].publicIp = e.publicIp;
-      instanceMap[e.name].status = 'start';
+      const name = e.name.split('-', 1)[1];
+      instanceMap[name].instanceId = e.instanceId;
+      instanceMap[name].privateIp = e.privateIp;
+      instanceMap[name].publicIp = e.publicIp;
+      instanceMap[name].status = 'start';
     });
 
     infra.desc = JSON.stringify(infraDesc);
