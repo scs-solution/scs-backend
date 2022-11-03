@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -32,6 +33,12 @@ export class InstanceService {
     dto: InstanceCreateDto,
   ): Promise<{ ok: boolean; error?: string }> {
     try {
+      Logger.log(
+        `create-new-instance\nuser: ${JSON.stringify(
+          user,
+        )}\ndto: ${JSON.stringify(dto)}`,
+      );
+
       // TODO: apply redis distributed lock
       const { name, infraName, instanceSpec, instanceType } = dto;
 
@@ -88,6 +95,11 @@ export class InstanceService {
     privateKey: string,
     desc: InfraDescription,
   ): Promise<void> {
+    Logger.log(
+      `apply-infra\ndesc: ${JSON.stringify(desc)}\nprivateKey: ${
+        privateKey.split('.')[0]
+      }\nupdateKey: ${this.infraUpdateKey}`,
+    );
     await axios
       .create({
         timeout: 30000,
@@ -98,7 +110,7 @@ export class InstanceService {
         updateKey: this.infraUpdateKey,
       })
       .catch(function (err) {
-        console.log(err);
+        Logger.error(`apply-infra\n${err}`);
       });
   }
 
