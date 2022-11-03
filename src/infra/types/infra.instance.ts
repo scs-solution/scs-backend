@@ -9,6 +9,8 @@ export class InfraInstance {
   instanceType: 'normal' | 'spot' | 'mysql' | 'redis';
   instanceSpec: string; // ex) t2.micro, c4.x5large
 
+  status: 'pending' | 'start' | 'interruption' | 'terminated';
+
   @Exclude()
   privateIp?: string;
   publicIp?: string;

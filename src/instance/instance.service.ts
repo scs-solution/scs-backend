@@ -49,6 +49,7 @@ export class InstanceService {
         name,
         instanceSpec,
         instanceType,
+        status: 'pending',
       };
 
       if (!infraDesc.instances) {

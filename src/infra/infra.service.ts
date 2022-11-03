@@ -77,6 +77,7 @@ export class InfraService {
     const instanceMap: { [id: string]: InfraInstance } = {};
 
     infraDesc.instances.forEach((e) => {
+      e.status = 'terminated';
       instanceMap[e.name] = e;
     });
 
@@ -84,6 +85,7 @@ export class InfraService {
       instanceMap[e.name].instanceId = e.instanceId;
       instanceMap[e.name].privateIp = e.privateIp;
       instanceMap[e.name].publicIp = e.publicIp;
+      instanceMap[e.name].status = 'start';
     });
 
     infra.desc = JSON.stringify(infraDesc);
