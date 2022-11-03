@@ -82,7 +82,7 @@ export class InfraService {
     });
 
     dto.instances.forEach((e) => {
-      const name = e.name.split('-', 1)[1];
+      const name = e.name.substring(e.name.indexOf('-') + 1);
       instanceMap[name].instanceId = e.instanceId;
       instanceMap[name].privateIp = e.privateIp;
       instanceMap[name].publicIp = e.publicIp;
