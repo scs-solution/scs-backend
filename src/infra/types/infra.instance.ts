@@ -14,4 +14,6 @@ export class InfraInstance {
   @Exclude()
   privateIp?: string;
   publicIp?: string;
+
+  initialDesc: string;
 }

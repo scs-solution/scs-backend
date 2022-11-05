@@ -40,7 +40,7 @@ export class InstanceService {
       );
 
       // TODO: apply redis distributed lock
-      const { name, infraName, instanceSpec, instanceType } = dto;
+      const { name, infraName, instanceSpec, instanceType, initialDesc } = dto;
 
       const infra = await this.getAndCheckInfra(user, infraName);
       const infraDesc: InfraDescription = JSON.parse(infra.desc);
@@ -56,6 +56,7 @@ export class InstanceService {
         name,
         instanceSpec,
         instanceType,
+        initialDesc: JSON.stringify(initialDesc),
         status: 'pending',
       };
 
