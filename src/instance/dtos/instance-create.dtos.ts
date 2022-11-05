@@ -1,4 +1,28 @@
-import { IsString, Matches } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDefined,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsObject,
+  IsString,
+  Matches,
+  ValidateIf,
+  ValidateNested,
+} from 'class-validator';
+
+export class InstanceCreateDtoInitialDescription {
+  @IsNotEmpty()
+  @ValidateIf((o) => !(o.initialScript && !o.imageName))
+  imageName: string;
+
+  @IsNotEmpty()
+  @ValidateIf((o) => !(o.imageName && !o.initialScript))
+  initialScript: string;
+
+  @IsString()
+  @IsNotEmpty()
+  runScript: string;
+}
 
 export class InstanceCreateDto {
   @IsString()
@@ -17,4 +41,11 @@ export class InstanceCreateDto {
 
   @IsString()
   instanceSpec: string; // ex) t2.micro, c4.x5large
+
+  @IsObject()
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @IsDefined()
+  @Type(() => InstanceCreateDtoInitialDescription)
+  initialDesc: InstanceCreateDtoInitialDescription;
 }
