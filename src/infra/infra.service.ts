@@ -1,5 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 import { InstanceRepository } from 'src/instance/instance.repository';
 import { User } from 'src/user/entities/user.entity';
 import { InfraCreateDto } from './dtos/infra-create.dtos';
@@ -68,8 +69,15 @@ export class InfraService {
 
     if (dto.updateKey !== this.infraUpdateKey) return;
 
-    const infra = await this.infraRepository.findOneBy({
-      name: dto.infraName,
+    const infra = await this.infraRepository.findOne({
+      where: {
+        name: dto.infraName,
+      },
+      relations: {
+        user: {
+          privateKey: true,
+        },
+      },
     });
 
     const infraDesc: InfraDescription = JSON.parse(infra.desc);
@@ -111,6 +119,7 @@ export class InfraService {
     });
 
     const instanceMustInserted: string[] = [];
+    const instanceMustInitialized: string[] = [];
 
     dto.instances.forEach((e) => {
       if (
@@ -118,11 +127,52 @@ export class InfraService {
         instanceExistsMap[e.instanceId] !== 1
       ) {
         instanceMustInserted.push(e.instanceId);
+        instanceMustInitialized.push(e.name);
       }
     });
 
     for (const instanceId of instanceMustInserted) {
       await this.instanceRepository.createInstance(infra, instanceId);
     }
+
+    if (instanceMustInserted.length !== 0) {
+      const userPrivateKey = infra.user.privateKey;
+      const infraDesc: InfraDescription = JSON.parse(infra.desc);
+
+      const instanceMap: { [id: string]: InfraInstance } = {};
+
+      infraDesc.instances.forEach((e) => {
+        instanceMap[e.name] = e;
+      });
+
+      for (const instanceName of instanceMustInitialized) {
+        const instance = instanceMap[instanceName];
+
+        this.initInstance(userPrivateKey, instance);
+      }
+    }
+  }
+
+  private async initInstance(
+    privateKey: string,
+    instance: InfraInstance,
+  ): Promise<void> {
+    Logger.log(
+      `init-instance\ninstance-desc: ${JSON.stringify(instance)}\nprivateKey: ${
+        privateKey.split('.')[0]
+      }\nupdateKey: ${this.infraUpdateKey}`,
+    );
+    await axios
+      .create({
+        timeout: 30000,
+      })
+      .post('http://172.17.0.1:3001/init-instance', {
+        instance: instance,
+        privateKey: privateKey.split('.')[0],
+        updateKey: this.infraUpdateKey,
+      })
+      .catch(function (err) {
+        Logger.error(`init-instance\n${err}`);
+      });
   }
 }
