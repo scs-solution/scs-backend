@@ -2,6 +2,7 @@ services:
   daligo-mysql:
     platform: linux/x86_64
     image: mysql
+    restart: always
     container_name: scs-dev-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
