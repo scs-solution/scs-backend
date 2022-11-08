@@ -74,9 +74,7 @@ export class InfraService {
         name: dto.infraName,
       },
       relations: {
-        user: {
-          privateKey: true,
-        },
+        user: true,
       },
     });
 
