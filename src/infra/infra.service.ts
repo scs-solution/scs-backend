@@ -127,7 +127,8 @@ export class InfraService {
         instanceExistsMap[e.instanceId] !== 1
       ) {
         instanceMustInserted.push(e.instanceId);
-        instanceMustInitialized.push(e.name);
+        const name = e.name.substring(e.name.indexOf('-') + 1);
+        instanceMustInitialized.push(name);
       }
     });
 
