@@ -65,6 +65,8 @@ export class InfraService {
   }
 
   async updateInfra(dto: InfraUpdateDto): Promise<void> {
+    Logger.log(`update-infra\ndesc: ${JSON.stringify(dto)}`);
+
     if (dto.instances === null) return;
 
     if (dto.updateKey !== this.infraUpdateKey) return;
