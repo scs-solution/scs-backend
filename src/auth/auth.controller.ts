@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Post,
+  Redirect,
   Req,
   Res,
   UseGuards,
@@ -38,6 +39,7 @@ export class AuthController {
   @Post()
   @ApiOperation({ summary: 'Login' })
   @ApiCreatedResponse({ description: 'jwt token', type: Tokens })
+  @Redirect('/monitoringpage')
   async logIn(
     @Body() dto: UserRegisterDTO,
     @Res({ passthrough: true }) res: Response,
