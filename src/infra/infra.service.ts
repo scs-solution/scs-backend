@@ -176,4 +176,10 @@ export class InfraService {
         Logger.error(`init-instance\n${err}`);
       });
   }
+
+  async getInfraDetail(infraName: string): Promise<InfraDescription> {
+    const infra = await this.infraRepository.findOneBy({ name: infraName });
+
+    return JSON.parse(infra.desc);
+  }
 }
