@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { InfraModule } from './infra/infra.module';
 import { AuthModule } from './auth/auth.module';
 import { InstanceModule } from './instance/instance.module';
+import { MonitorModule } from './monitor/monitor.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { InstanceModule } from './instance/instance.module';
     InfraModule,
     AuthModule,
     InstanceModule,
+    MonitorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
