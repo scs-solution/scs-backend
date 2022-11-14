@@ -22,7 +22,7 @@ export class MonitorService {
         const ip = instance.privateIp;
 
         const res1 = await axios.post(`http://${ip}:8080/api/v1.0/machine`);
-        const memoryCapacity = res1['memory_capacity'];
+        const memoryCapacity = res1.data['memory_capacity'];
 
         const res2 = await axios.post(`http://${ip}:8080/api/v1.0/containers/`);
         const cur = res2.data['stats'].at(-1);
