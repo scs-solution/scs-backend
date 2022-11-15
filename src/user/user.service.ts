@@ -5,6 +5,7 @@ import * as AWS from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -76,5 +77,22 @@ export class UserService {
       .catch(function (err) {
         console.log(err);
       });
+  }
+
+  async getPrivateKey(currentUser: User): Promise<string> {
+    const s3 = new AWS.S3({
+      useAccelerateEndpoint: true,
+      signatureVersion: 'v4',
+      region: 'ap-northeast-2',
+    });
+
+    const pk = await s3
+      .getObject({
+        Bucket: this.keyPairS3Buket,
+        Key: currentUser.privateKey,
+      })
+      .promise();
+
+    return pk.Body.toString();
   }
 }
