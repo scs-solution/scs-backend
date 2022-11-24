@@ -1,6 +1,6 @@
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Infra } from 'src/infra/entities/infra.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Instance extends CoreEntity {
@@ -13,4 +13,15 @@ export class Instance extends CoreEntity {
 
   @Column()
   infraId: number;
+
+  @Column()
+  latestAMI: string;
+
+  @Column()
+  age: number;
+
+  @BeforeInsert()
+  async createInfraId(): Promise<void> {
+    this.age = 0;
+  }
 }
