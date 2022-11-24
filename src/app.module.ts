@@ -11,6 +11,8 @@ import { InfraModule } from './infra/infra.module';
 import { AuthModule } from './auth/auth.module';
 import { InstanceModule } from './instance/instance.module';
 import { MonitorModule } from './monitor/monitor.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -40,12 +42,15 @@ import { MonitorModule } from './monitor/monitor.module';
       inject: [MySQLConfigService],
     }),
 
+    ScheduleModule.forRoot(),
+
     UserModule,
     ConfigModule,
     InfraModule,
     AuthModule,
     InstanceModule,
     MonitorModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],
