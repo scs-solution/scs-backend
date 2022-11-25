@@ -182,4 +182,63 @@ export class InfraService {
 
     return JSON.parse(infra.desc);
   }
+
+  async deleteInfra(
+    user: User,
+    infraName: string,
+  ): Promise<{ ok: boolean; error?: string }> {
+    try {
+      const infras = await this.infraRepository.find({
+        select: {
+          name: true,
+        },
+        where: [
+          {
+            user: { id: user.id },
+          },
+        ],
+      });
+
+      let ok = false;
+      let infraDesc: InfraDescription;
+
+      for (const infra of infras) {
+        if (infra.name === infraName) {
+          ok = true;
+          infraDesc = JSON.parse(infra.desc);
+        }
+      }
+
+      if (ok === false) return { ok: false, error: 'Bad authorized' };
+
+      await this.destroyInfra(user.privateKey, infraDesc);
+
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
+  }
+
+  private async destroyInfra(
+    privateKey: string,
+    desc: InfraDescription,
+  ): Promise<void> {
+    Logger.log(
+      `destroy-infra\ndesc: ${JSON.stringify(desc)}\nprivateKey: ${
+        privateKey.split('.')[0]
+      }\nupdateKey: ${this.infraUpdateKey}`,
+    );
+    await axios
+      .create({
+        timeout: 30000,
+      })
+      .post('http://172.17.0.1:3001/destroy-infra', {
+        desc: desc,
+        privateKey: privateKey.split('.')[0],
+        updateKey: this.infraUpdateKey,
+      })
+      .catch(function (err) {
+        Logger.error(`destroy-infra\n${err}`);
+      });
+  }
 }

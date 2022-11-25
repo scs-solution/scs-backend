@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -35,6 +36,15 @@ export class InfraController {
     @CurrentUser() currentUser: User,
   ): Promise<{ ok: boolean; error?: string; result?: string[] }> {
     return await this.infraService.listInfra(currentUser);
+  }
+
+  @Delete('/:name')
+  @UseGuards(AccessTokenGuard)
+  async deleteInfra(
+    @CurrentUser() currentUser: User,
+    @Param('name') infraName: string,
+  ): Promise<{ ok: boolean; error?: string }> {
+    return await this.infraService.deleteInfra(currentUser, infraName);
   }
 
   @Get('/detail/:name')

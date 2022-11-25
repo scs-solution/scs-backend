@@ -39,7 +39,7 @@ export class TaskService {
       })
       .post('http://172.17.0.1:3001/create-ami', {
         instanceId: instance.id,
-        age: instance.age,
+        latestAMI: instance.latestAMI,
         updateKey: this.infraUpdateKey,
       })
       .catch(function (err) {
