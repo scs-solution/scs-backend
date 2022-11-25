@@ -94,6 +94,7 @@ export class InfraService {
       instanceMap[name].instanceId = e.instanceId;
       instanceMap[name].privateIp = e.privateIp;
       instanceMap[name].publicIp = e.publicIp;
+      instanceMap[name].eipId = e.eipId;
       instanceMap[name].status = 'start';
     });
 

@@ -12,6 +12,9 @@ export class InfraUpdateDtoInstance {
 
   @IsString()
   publicIp: string;
+
+  @IsString()
+  eipId: string;
 }
 
 export class InfraUpdateDto {
