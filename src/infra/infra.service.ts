@@ -191,6 +191,7 @@ export class InfraService {
       const infras = await this.infraRepository.find({
         select: {
           name: true,
+          desc: true,
         },
         where: [
           {
