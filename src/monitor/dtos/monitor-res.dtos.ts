@@ -9,7 +9,7 @@ export class MonitorResInstanceMetric {
   ramTotal: number;
   txBps: number;
   rxBps: number;
-  pingpong: object;
+  pingpong: string;
 }
 
 export class MonitorResDto {

@@ -64,14 +64,14 @@ export class MonitorService {
 
         instances.push({
           name: instance.name,
-          publicIp: ip,
+          publicIp: instance.publicIp,
           cpu,
           memoryCapacity,
           hotMemory,
           ramTotal,
           txBps,
           rxBps,
-          pingpong: res3.data,
+          pingpong: JSON.stringify(res3.data),
         });
       }
     }
