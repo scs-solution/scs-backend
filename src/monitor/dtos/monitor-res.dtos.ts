@@ -1,5 +1,3 @@
-import { object } from 'joi';
-
 export class MonitorResInstanceMetric {
   name: string;
   publicIp: string;
