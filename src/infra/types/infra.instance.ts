@@ -11,7 +11,6 @@ export class InfraInstance {
 
   status: 'pending' | 'start' | 'interruption' | 'terminated';
 
-  @Exclude()
   privateIp?: string;
   publicIp?: string;
 
