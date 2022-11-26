@@ -71,7 +71,7 @@ export class MonitorService {
           ramTotal,
           txBps,
           rxBps,
-          pingpong: JSON.stringify(res3.data),
+          pingpong: res3.data,
         });
       }
     }
