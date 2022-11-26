@@ -28,6 +28,9 @@ export class MonitorService {
         const cur = res2.data['stats'].at(-1);
         const prev = res2.data['stats'].at(-2);
 
+        const res3 = await axios.get(`http://${ip}:5000/check`);
+        await axios.get(`http://${ip}:5000/clear`);
+
         function getInterval(current, previous) {
           const cur1 = new Date(current);
           const prev1 = new Date(previous);
@@ -68,6 +71,7 @@ export class MonitorService {
           ramTotal,
           txBps,
           rxBps,
+          pingpong: res3,
         });
       }
     }

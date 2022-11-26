@@ -1,3 +1,5 @@
+import { object } from 'joi';
+
 export class MonitorResInstanceMetric {
   name: string;
   publicIp: string;
@@ -7,6 +9,7 @@ export class MonitorResInstanceMetric {
   ramTotal: number;
   txBps: number;
   rxBps: number;
+  pingpong: object;
 }
 
 export class MonitorResDto {
