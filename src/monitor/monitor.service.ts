@@ -71,7 +71,7 @@ export class MonitorService {
           ramTotal,
           txBps,
           rxBps,
-          pingpong: res3,
+          pingpong: res3.data,
         });
       }
     }
