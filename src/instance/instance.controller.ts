@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from 'src/user/entities/user.entity';
@@ -6,6 +6,7 @@ import { InstanceCreateDto } from './dtos/instance-create.dtos';
 import { ReceiveSnsEventDto } from './dtos/receive-sns-event.dtos';
 import { InstanceService } from './instance.service';
 import { Logger } from '@nestjs/common';
+import { InstanceAMIUpdateDto } from './dtos/instance-update.dto';
 
 @Controller('instance')
 export class InstanceController {
@@ -24,5 +25,10 @@ export class InstanceController {
   async receiveSnsEvent(@Body() e: ReceiveSnsEventDto): Promise<void> {
     Logger.log('receive sns event', JSON.stringify(e));
     await this.instanceService.receiveSnsEvent(e);
+  }
+
+  @Put('/ami')
+  async updateAMIId(@Body() dto: InstanceAMIUpdateDto): Promise<void> {
+    await this.instanceService.updateInstancAMI(dto);
   }
 }

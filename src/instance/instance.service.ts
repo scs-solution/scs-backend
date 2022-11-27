@@ -12,6 +12,7 @@ import { InfraDescription } from 'src/infra/types/infra.desc';
 import { InfraInstance } from 'src/infra/types/infra.instance';
 import { User } from 'src/user/entities/user.entity';
 import { InstanceCreateDto } from './dtos/instance-create.dtos';
+import { InstanceAMIUpdateDto } from './dtos/instance-update.dto';
 import { ReceiveSnsEventDto } from './dtos/receive-sns-event.dtos';
 import { InstanceRepository } from './instance.repository';
 import { AWSEventBridgeEvent } from './model/aws-event.model';
@@ -152,5 +153,21 @@ export class InstanceService {
       .catch(function (err) {
         console.log(err);
       });
+  }
+
+  async updateInstancAMI(dto: InstanceAMIUpdateDto): Promise<void> {
+    Logger.log(`update-instance-ami\ndesc: ${JSON.stringify(dto)}`);
+
+    if (dto.amiId === null) return;
+
+    if (dto.updateKey !== this.infraUpdateKey) return;
+
+    const instance = await this.instanceRepository.findOneBy({
+      instanceId: dto.instanceId,
+    });
+
+    instance.latestAMI = dto.amiId;
+
+    await this.instanceRepository.save(instance);
   }
 }
