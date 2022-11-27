@@ -19,6 +19,8 @@ export class MonitorService {
 
     if (infraDesc.instances !== undefined) {
       for (const instance of infraDesc.instances) {
+        if (instance.status !== 'start') continue;
+
         const ip = instance.privateIp;
 
         const res1 = await axios.post(`http://${ip}:8080/api/v1.0/machine`);
