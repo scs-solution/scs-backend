@@ -1,6 +1,7 @@
 export class MonitorResInstanceMetric {
   name: string;
   publicIp: string;
+  privateIp: string;
   cpu: number;
   memoryCapacity: number;
   hotMemory: number;

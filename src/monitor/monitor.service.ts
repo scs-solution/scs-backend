@@ -67,6 +67,7 @@ export class MonitorService {
         instances.push({
           name: instance.name,
           publicIp: instance.publicIp,
+          privateIp: instance.privateIp,
           cpu,
           memoryCapacity,
           hotMemory,
