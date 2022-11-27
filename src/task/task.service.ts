@@ -38,7 +38,7 @@ export class TaskService {
         timeout: 30000,
       })
       .post('http://172.17.0.1:3001/create-ami', {
-        instanceId: instance.id,
+        instanceId: instance.instanceId,
         latestAMI: instance.latestAMI,
         updateKey: this.infraUpdateKey,
       })
