@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from 'src/user/entities/user.entity';
@@ -30,5 +38,19 @@ export class InstanceController {
   @Put('/ami')
   async updateAMIId(@Body() dto: InstanceAMIUpdateDto): Promise<void> {
     await this.instanceService.updateInstancAMI(dto);
+  }
+
+  @Delete('/:infra/:name')
+  @UseGuards(AccessTokenGuard)
+  async removeInstance(
+    @CurrentUser() currentUser: User,
+    @Param('infra') infraName: string,
+    @Param('name') instanceName: string,
+  ): Promise<{ ok: boolean; error?: string }> {
+    return await this.instanceService.removeInstance(
+      currentUser,
+      infraName,
+      instanceName,
+    );
   }
 }

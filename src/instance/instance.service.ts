@@ -170,4 +170,43 @@ export class InstanceService {
 
     await this.instanceRepository.save(instance);
   }
+
+  async removeInstance(
+    user: User,
+    infraName: string,
+    instanceName: string,
+  ): Promise<{ ok: boolean; error?: string }> {
+    try {
+      Logger.log(
+        `remove-instance\nuser: ${JSON.stringify(
+          user,
+        )}\ninfra: ${infraName}\ninstance: ${instanceName}`,
+      );
+
+      const infra = await this.getAndCheckInfra(user, infraName);
+      const infraDesc: InfraDescription = JSON.parse(infra.desc);
+
+      if (
+        infraDesc.instances &&
+        !infraDesc.instances.some((e) => e.name === instanceName)
+      ) {
+        throw new BadRequestException('Instance name is not exists!');
+      }
+
+      const index = infraDesc.instances.findIndex(
+        (e) => e.name === instanceName,
+      )[0];
+      infraDesc.instances.splice(index, 1);
+
+      infra.desc = JSON.stringify(infraDesc);
+
+      await this.infraRespository.save(infra);
+
+      this.applyInfra(user.privateKey, infraDesc);
+
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
+  }
 }
