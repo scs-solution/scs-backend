@@ -84,7 +84,10 @@ export class InfraService {
 
     const instanceMap: { [id: string]: InfraInstance } = {};
 
+    const ignoreUpdate: any = [];
+
     infraDesc.instances.forEach((e) => {
+      if (e.status !== 'pending') ignoreUpdate.push(e.name);
       e.status = 'terminated';
       instanceMap[e.name] = e;
     });
@@ -102,12 +105,13 @@ export class InfraService {
 
     await this.infraRepository.save(infra);
 
-    await this.updateInstances(dto, infra);
+    await this.updateInstances(dto, infra, ignoreUpdate);
   }
 
   private async updateInstances(
     dto: InfraUpdateDto,
     infra: Infra,
+    ignore: [string],
   ): Promise<void> {
     const instances = await this.instanceRepository.findBy({
       infraId: infra.id,
@@ -149,6 +153,8 @@ export class InfraService {
 
       for (const instanceName of instanceMustInitialized) {
         const instance = instanceMap[instanceName];
+
+        if (ignore.indexOf(instanceName) >= 0) continue;
 
         this.initInstance(userPrivateKey, instance);
       }
