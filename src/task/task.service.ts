@@ -16,7 +16,7 @@ export class TaskService {
     this.infraUpdateKey = this.configService.get<string>('INFRA_UPDATE_KEY');
   }
 
-  @Cron('*/5 * * * *')
+  @Cron('*/3 * * * *')
   async createAMIJob() {
     Logger.log('[CRON] Create AMI');
 
