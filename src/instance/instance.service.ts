@@ -140,13 +140,18 @@ export class InstanceService {
     const infra = instance.infra;
     const infraDesc: InfraDescription = JSON.parse(infra.desc);
 
+    const instanceType = infraDesc.instances.find(
+      (x) => x.instanceId === targetInstanceId,
+    ).instanceSpec;
+
     await axios
       .create({
         timeout: 30000,
       })
       .post('http://172.17.0.1:3001/handle-spot-termination', {
-        target: targetInstanceId,
-        desc: infraDesc,
+        instanceId: targetInstanceId,
+        instanceType: instanceType,
+        amiId: instance.latestAMI,
         privateKey: infra.user.privateKey.split('.')[0],
         updateKey: this.infraUpdateKey,
       })
