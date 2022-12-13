@@ -12,7 +12,10 @@ import { InfraDescription } from 'src/infra/types/infra.desc';
 import { InfraInstance } from 'src/infra/types/infra.instance';
 import { User } from 'src/user/entities/user.entity';
 import { InstanceCreateDto } from './dtos/instance-create.dtos';
-import { InstanceAMIUpdateDto } from './dtos/instance-update.dto';
+import {
+  InstanceAMIUpdateDto,
+  InstanceSpotUpdateDto,
+} from './dtos/instance-update.dto';
 import { ReceiveSnsEventDto } from './dtos/receive-sns-event.dtos';
 import { InstanceRepository } from './instance.repository';
 import { AWSEventBridgeEvent } from './model/aws-event.model';
@@ -140,9 +143,16 @@ export class InstanceService {
     const infra = instance.infra;
     const infraDesc: InfraDescription = JSON.parse(infra.desc);
 
-    const instanceType = infraDesc.instances.find(
+    const instanceDesc = infraDesc.instances.find(
       (x) => x.instanceId === targetInstanceId,
-    ).instanceSpec;
+    );
+
+    const instanceType = instanceDesc.instanceSpec;
+
+    instanceDesc.status = 'interruption';
+
+    infra.desc = JSON.stringify(infraDesc);
+    await this.infraRespository.save(infra);
 
     await axios
       .create({
@@ -160,7 +170,7 @@ export class InstanceService {
       });
   }
 
-  async updateInstancAMI(dto: InstanceAMIUpdateDto): Promise<void> {
+  async updateInstanceAMI(dto: InstanceAMIUpdateDto): Promise<void> {
     Logger.log(`update-instance-ami\ndesc: ${JSON.stringify(dto)}`);
 
     if (dto.amiId === null) return;
@@ -174,6 +184,43 @@ export class InstanceService {
     instance.latestAMI = dto.amiId;
 
     await this.instanceRepository.save(instance);
+  }
+
+  async updateInstanceSpot(dto: InstanceSpotUpdateDto): Promise<void> {
+    Logger.log(`update-instance-spot\ndesc: ${JSON.stringify(dto)}`);
+
+    if (dto.updateKey !== this.infraUpdateKey) return;
+
+    const { instanceId, newInstanceId, newPrivateIp, requestId } = dto;
+
+    const oldInstance = await this.instanceRepository.findOne({
+      where: {
+        instanceId: instanceId,
+      },
+      relations: {
+        infra: {
+          user: true,
+        },
+      },
+    });
+
+    const infra = oldInstance.infra;
+    const infraDesc: InfraDescription = JSON.parse(infra.desc);
+
+    const oldInstanceDesc = infraDesc.instances.find(
+      (x) => x.instanceId === instanceId,
+    );
+
+    oldInstanceDesc.instanceId = newInstanceId;
+    oldInstanceDesc.privateIp = newPrivateIp;
+
+    oldInstanceDesc.status = 'start';
+
+    infra.desc = JSON.stringify(infraDesc);
+    await this.infraRespository.save(infra);
+
+    oldInstance.instanceId = newInstanceId;
+    await this.instanceRepository.save(oldInstance);
   }
 
   async removeInstance(

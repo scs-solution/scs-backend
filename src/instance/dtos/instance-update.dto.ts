@@ -10,3 +10,20 @@ export class InstanceAMIUpdateDto {
   @IsString()
   amiId: string;
 }
+
+export class InstanceSpotUpdateDto {
+  @IsString()
+  instanceId: string;
+
+  @IsString()
+  newInstanceId: string;
+
+  @IsString()
+  newPrivateIp: string;
+
+  @IsString()
+  requestId: string;
+
+  @IsString()
+  updateKey: string;
+}

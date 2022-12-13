@@ -14,7 +14,10 @@ import { InstanceCreateDto } from './dtos/instance-create.dtos';
 import { ReceiveSnsEventDto } from './dtos/receive-sns-event.dtos';
 import { InstanceService } from './instance.service';
 import { Logger } from '@nestjs/common';
-import { InstanceAMIUpdateDto } from './dtos/instance-update.dto';
+import {
+  InstanceAMIUpdateDto,
+  InstanceSpotUpdateDto,
+} from './dtos/instance-update.dto';
 
 @Controller('instance')
 export class InstanceController {
@@ -37,7 +40,12 @@ export class InstanceController {
 
   @Put('/ami')
   async updateAMIId(@Body() dto: InstanceAMIUpdateDto): Promise<void> {
-    await this.instanceService.updateInstancAMI(dto);
+    await this.instanceService.updateInstanceAMI(dto);
+  }
+
+  @Put('/spot')
+  async updateSpot(@Body() dto: InstanceSpotUpdateDto): Promise<void> {
+    await this.instanceService.updateInstanceSpot(dto);
   }
 
   @Delete('/:infra/:name')
