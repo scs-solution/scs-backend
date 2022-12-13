@@ -221,6 +221,23 @@ export class InstanceService {
 
     oldInstance.instanceId = newInstanceId;
     await this.instanceRepository.save(oldInstance);
+
+    await axios
+      .create({
+        timeout: 30000,
+      })
+      .post('http://172.17.0.1:3001/update-spot-instance-state', {
+        infraName: infra.name,
+        instanceId: instanceId,
+        newInstanceId: newInstanceId,
+        privateIp: newPrivateIp,
+        requestId: requestId,
+        privateKey: infra.user.privateKey.split('.')[0],
+        updateKey: this.infraUpdateKey,
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   }
 
   async removeInstance(
