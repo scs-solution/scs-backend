@@ -20,6 +20,9 @@ export class Instance extends CoreEntity {
   @Column()
   age: number;
 
+  @Column()
+  lock: boolean;
+
   @BeforeInsert()
   async createInfraId(): Promise<void> {
     this.latestAMI = '';

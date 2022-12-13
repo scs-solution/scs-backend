@@ -151,6 +151,9 @@ export class InstanceService {
 
     instanceDesc.status = 'interruption';
 
+    instance.lock = true;
+    await this.instanceRepository.save(instance);
+
     infra.desc = JSON.stringify(infraDesc);
     await this.infraRespository.save(infra);
 
@@ -220,6 +223,7 @@ export class InstanceService {
     await this.infraRespository.save(infra);
 
     oldInstance.instanceId = newInstanceId;
+    oldInstance.lock = false;
     await this.instanceRepository.save(oldInstance);
 
     await axios

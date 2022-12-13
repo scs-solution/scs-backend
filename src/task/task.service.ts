@@ -23,7 +23,7 @@ export class TaskService {
     const instances = await this.instanceRepository.find();
 
     for (const instance of instances) {
-      await this.createAMI(instance);
+      if (instance.lock === false) await this.createAMI(instance);
     }
   }
 
